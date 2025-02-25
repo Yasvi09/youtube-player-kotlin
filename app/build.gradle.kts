@@ -66,6 +66,7 @@ dependencies {
     implementation ("com.pierfrancescosoffritti.androidyoutubeplayer:core:12.1.0")
     implementation ("androidx.recyclerview:recyclerview:1.3.2")
     implementation ("com.squareup.picasso:picasso:2.8")
+    implementation ("com.android.volley:volley:1.2.1")
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
