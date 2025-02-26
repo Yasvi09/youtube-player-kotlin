@@ -1,7 +1,6 @@
 package com.example.youtubeplayer.ui.theme
 
 import android.annotation.SuppressLint
-import com.example.youtubeplayer.R
 import android.os.Bundle
 import android.webkit.WebChromeClient
 import android.webkit.WebSettings
@@ -9,6 +8,7 @@ import android.webkit.WebView
 import android.webkit.WebViewClient
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.example.youtubeplayer.R
 
 class VideoPlayerActivity : AppCompatActivity() {
 
@@ -45,13 +45,17 @@ class VideoPlayerActivity : AppCompatActivity() {
 
     private fun loadYoutubeVideo() {
         val htmlContent = """
-            <html>
-            <body style='margin:0;padding:0;'>
-            <iframe width='100%' height='100%' src='https://www.youtube.com/embed/$videoId?autoplay=1' 
-            frameborder='0' allowfullscreen></iframe>
-            </body>
-            </html>
-        """.trimIndent()
+    <html>
+    <body style='margin:0;padding:0;'>
+        <div style='position:relative;width:100%;padding-top:56.25%;'>
+            <iframe style='position:absolute;top:0;left:0;width:100%;height:100%;' 
+                src='https://www.youtube.com/embed/$videoId?autoplay=1' 
+                frameborder='0' allowfullscreen>
+            </iframe>
+        </div>
+    </body>
+    </html>
+""".trimIndent()
 
         webView.loadData(htmlContent, "text/html", "utf-8")
     }
