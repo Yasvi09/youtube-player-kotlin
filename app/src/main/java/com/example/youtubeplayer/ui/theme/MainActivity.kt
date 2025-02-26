@@ -93,7 +93,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun changeAppIcon(enableAlias: Boolean) {
         val pm = packageManager
-        val mainComponent = ComponentName(this, "com.example.youtubeplayer.MainActivity")
+        val mainComponent = ComponentName(this, "com.example.youtubeplayer.ui.theme.MainActivity")
         val aliasComponent = ComponentName(this, "com.example.youtubeplayer.MainActivity_Alias")
 
         pm.setComponentEnabledSetting(
@@ -107,6 +107,13 @@ class MainActivity : AppCompatActivity() {
             PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
             PackageManager.DONT_KILL_APP
         )
+
+        // Add a confirmation toast
+        Toast.makeText(
+            this,
+            "App icon changed! It may take a moment to update on your launcher.",
+            Toast.LENGTH_SHORT
+        ).show()
     }
 
 }
