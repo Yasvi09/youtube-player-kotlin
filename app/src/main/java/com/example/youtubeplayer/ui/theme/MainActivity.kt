@@ -46,7 +46,7 @@ class MainActivity : AppCompatActivity() {
 
         val notificationsButton = findViewById<ImageView>(R.id.notifications_button)
         notificationsButton.setOnClickListener {
-            changeAppIcon(enableAlias = true)
+            toggleAppIcon()
         }
     }
 
@@ -91,29 +91,36 @@ class MainActivity : AppCompatActivity() {
         requestQueue.add(stringRequest)
     }
 
-    private fun changeAppIcon(enableAlias: Boolean) {
+    private fun toggleAppIcon() {
         val pm = packageManager
+
+        // Get the currently active component
         val mainComponent = ComponentName(this, "com.example.youtubeplayer.ui.theme.MainActivity")
         val aliasComponent = ComponentName(this, "com.example.youtubeplayer.MainActivity_Alias")
 
+        val mainEnabled = pm.getComponentEnabledSetting(mainComponent) ==
+                PackageManager.COMPONENT_ENABLED_STATE_ENABLED
+
+        // Toggle between the two icons
         pm.setComponentEnabledSetting(
-            if (enableAlias) aliasComponent else mainComponent,
-            PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
+            mainComponent,
+            if (mainEnabled) PackageManager.COMPONENT_ENABLED_STATE_DISABLED
+            else PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
             PackageManager.DONT_KILL_APP
         )
 
         pm.setComponentEnabledSetting(
-            if (enableAlias) mainComponent else aliasComponent,
-            PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
+            aliasComponent,
+            if (mainEnabled) PackageManager.COMPONENT_ENABLED_STATE_ENABLED
+            else PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
             PackageManager.DONT_KILL_APP
         )
 
-        // Add a confirmation toast
+        // Show a confirmation toast
         Toast.makeText(
             this,
             "App icon changed! It may take a moment to update on your launcher.",
             Toast.LENGTH_SHORT
         ).show()
     }
-
 }
