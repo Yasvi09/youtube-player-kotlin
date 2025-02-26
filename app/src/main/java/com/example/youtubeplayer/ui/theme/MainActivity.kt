@@ -1,8 +1,11 @@
 package com.example.youtubeplayer.ui.theme
 
+import android.content.ComponentName
+import android.content.pm.PackageManager
 import com.example.youtubeplayer.R
 import android.os.Bundle
 import android.util.Log
+import android.widget.ImageView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -40,6 +43,11 @@ class MainActivity : AppCompatActivity() {
         categoryRecyclerView.adapter = categoryTagAdapter
 
         fetchData()
+
+        val notificationsButton = findViewById<ImageView>(R.id.notifications_button)
+        notificationsButton.setOnClickListener {
+            changeAppIcon(enableAlias = true)
+        }
     }
 
     private fun fetchData() {
@@ -82,4 +90,23 @@ class MainActivity : AppCompatActivity() {
 
         requestQueue.add(stringRequest)
     }
+
+    private fun changeAppIcon(enableAlias: Boolean) {
+        val pm = packageManager
+        val mainComponent = ComponentName(this, "com.example.youtubeplayer.MainActivity")
+        val aliasComponent = ComponentName(this, "com.example.youtubeplayer.MainActivity_Alias")
+
+        pm.setComponentEnabledSetting(
+            if (enableAlias) aliasComponent else mainComponent,
+            PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
+            PackageManager.DONT_KILL_APP
+        )
+
+        pm.setComponentEnabledSetting(
+            if (enableAlias) mainComponent else aliasComponent,
+            PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
+            PackageManager.DONT_KILL_APP
+        )
+    }
+
 }

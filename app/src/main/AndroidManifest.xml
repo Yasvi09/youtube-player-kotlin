@@ -25,6 +25,21 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <activity-alias
+            android:name="com.example.youtubeplayer.MainActivity_Alias"
+            android:targetActivity=".ui.theme.MainActivity"
+            android:icon="@mipmap/ic_launcher_alternate"
+            android:enabled="false"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity-alias>
     </application>
+
+
+
 
 </manifest>
