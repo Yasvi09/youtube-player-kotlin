@@ -1,21 +1,66 @@
 package com.example.youtubeplayer.ui.theme
 
-import android.os.Bundle
-import androidx.activity.enableEdgeToEdge
-import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
+import android.annotation.SuppressLint
 import com.example.youtubeplayer.R
+import android.os.Bundle
+import android.webkit.WebChromeClient
+import android.webkit.WebSettings
+import android.webkit.WebView
+import android.webkit.WebViewClient
+import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 
 class VideoPlayerActivity : AppCompatActivity() {
+
+    private lateinit var webView: WebView
+    private var videoId: String? = null
+
+    @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
         setContentView(R.layout.activity_video_player)
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
-            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
-            insets
+
+        videoId = intent.getStringExtra("video_id")
+        if (videoId.isNullOrEmpty()) {
+            Toast.makeText(this, "Error: No video ID provided", Toast.LENGTH_SHORT).show()
+            finish()
+            return
+        }
+
+        webView = findViewById(R.id.webView)
+        setupWebView()
+        loadYoutubeVideo()
+    }
+
+    private fun setupWebView() {
+        val webSettings: WebSettings = webView.settings
+        webSettings.javaScriptEnabled = true
+        webSettings.domStorageEnabled = true
+        webSettings.useWideViewPort = true
+        webSettings.loadWithOverviewMode = true
+
+        webView.webChromeClient = WebChromeClient()
+        webView.webViewClient = WebViewClient()
+    }
+
+    private fun loadYoutubeVideo() {
+        val htmlContent = """
+            <html>
+            <body style='margin:0;padding:0;'>
+            <iframe width='100%' height='100%' src='https://www.youtube.com/embed/$videoId?autoplay=1' 
+            frameborder='0' allowfullscreen></iframe>
+            </body>
+            </html>
+        """.trimIndent()
+
+        webView.loadData(htmlContent, "text/html", "utf-8")
+    }
+
+    override fun onBackPressed() {
+        if (webView.canGoBack()) {
+            webView.goBack()
+        } else {
+            super.onBackPressed()
         }
     }
 }
